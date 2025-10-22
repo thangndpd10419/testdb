@@ -5,8 +5,11 @@ import com.example.foodbe.dto.CategoryRequestDTO;
 import com.example.foodbe.dto.category.CategoryResponseDTO;
 import com.example.foodbe.dto.category.CreateCategoryDTO;
 import com.example.foodbe.dto.category.UpdateCategoryDTO;
+import com.example.foodbe.models.Category;
+import com.example.foodbe.payload.ApiResponse;
 import com.example.foodbe.services.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,29 +23,30 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public List<CategoryResponseDTO> getAll(){
-        return categoryService.findAll();
+    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>>  getAll(){
+        return ResponseEntity.ok(ApiResponse.success(categoryService.findAll()));
     }
 
     @GetMapping("/{id}")
-    public CategoryResponseDTO getById(@Valid @PathVariable Long id){
-        return categoryService.findById(id);
+    public  ResponseEntity<ApiResponse<CategoryResponseDTO>> getById(@Valid @PathVariable Long id){
+        return ResponseEntity.ok(ApiResponse.success(categoryService.findById(id)));
     }
 
     @PostMapping
-    public CategoryResponseDTO create(@RequestBody CreateCategoryDTO createCategoryDTO){
-        return categoryService.create(createCategoryDTO);
+    public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(@RequestBody CreateCategoryDTO createCategoryDTO){
+        return ResponseEntity.ok(ApiResponse.success(categoryService.create(createCategoryDTO)));
     }
 
     @PutMapping("/{id}")
-    public CategoryResponseDTO updateById(@PathVariable Long id,
+    public ResponseEntity<ApiResponse<CategoryResponseDTO>> updateById(@PathVariable Long id,
                                          @Valid @RequestBody UpdateCategoryDTO updateCategoryDTO){
-        return categoryService.update(id,updateCategoryDTO);
+        return ResponseEntity.ok(ApiResponse.success(categoryService.update(id,updateCategoryDTO)));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<String>> deleteById(@PathVariable Long id){
         categoryService.deleteById(id);
+        return  ResponseEntity.ok(ApiResponse.success("xoa thanh cong id: "+id));
     }
 
 
