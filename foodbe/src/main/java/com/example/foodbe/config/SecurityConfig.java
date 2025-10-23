@@ -2,6 +2,7 @@ package com.example.foodbe.config;
 
 
 import com.example.foodbe.services.impls.UserDetailsServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,42 +11,43 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+
+    private final UserDetailsServiceImpl userDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Tắt CSRF (phù hợp khi xây dựng REST API hoặc khi sử dụng JWT)
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable())  // Tắt CSRF
 
-                // Cấu hình quyền truy cập cho các endpoint
-                .authorizeHttpRequests(authz -> authz
-                        //.requestMatchers("/public/**").permitAll()  // Các endpoint công khai
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Không dùng session
+
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/login").permitAll() // Cho phép login không cần auth
                         .requestMatchers("/api/categories/**").permitAll()
                         .requestMatchers("/api/users").permitAll()
                         .requestMatchers("/api/users/*").permitAll()
-                        .requestMatchers("/api/users/**").hasAnyRole("User","Admin")
-                        .anyRequest().authenticated()  // Các endpoint khác yêu cầu đăng nhập
+                        .requestMatchers("/api/users/**").hasAnyRole("User", "Admin")
+                        .anyRequest().authenticated()
                 )
 
-                // Cấu hình login mặc định (nếu cần thiết cho ứng dụng web)
-                .formLogin(withDefaults())  // Dùng form login mặc định
-                .logout(withDefaults());  // Cấu hình logout mặc định
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Thêm JWT filter
 
-        return http.build();  // Trả về SecurityFilterChain
+        return http.build();
     }
-
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder =
