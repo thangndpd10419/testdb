@@ -4,6 +4,7 @@ import com.example.foodbe.dto.CategoryRequestDTO;
 import com.example.foodbe.dto.category.CategoryResponseDTO;
 import com.example.foodbe.dto.category.CreateCategoryDTO;
 import com.example.foodbe.dto.category.UpdateCategoryDTO;
+import com.example.foodbe.exception.NotFoundException;
 import com.example.foodbe.mapper.CategoryMapper;
 import com.example.foodbe.models.Category;
 import com.example.foodbe.repositories.CategoryRepository;
@@ -35,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponseDTO findById(Long id) {
       Category category=  categoryRepository.findById(id)
-               .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+               .orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
      return categoryMapper.toDTO(category);
     }
 
@@ -50,7 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponseDTO update(Long id,UpdateCategoryDTO updateCategoryDTO) {
         // 1. Tìm entity cũ trong DB
         Category existingCategory = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
 
         // cập nhật
         categoryMapper.updateEntityFromDto(updateCategoryDTO,existingCategory);
@@ -64,7 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteById(Long id) {
         // Kiểm tra xem category có tồn tại không
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
 
         // Xóa category nếu tồn tại
         categoryRepository.deleteById(id);

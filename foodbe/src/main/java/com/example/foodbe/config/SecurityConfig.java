@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login").permitAll() // Cho phép login không cần auth
                         .requestMatchers("/api/categories/**").permitAll()
+                        .requestMatchers("api/categories").permitAll()
                         .requestMatchers("/api/users").permitAll()
                         .requestMatchers("/api/users/*").permitAll()
                         .requestMatchers("/api/users/**").hasAnyRole("User", "Admin")
