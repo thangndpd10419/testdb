@@ -48,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponseDTO update(Long id,UpdateCategoryDTO updateCategoryDTO) {
+    public CategoryResponseDTO updateById(Long id,UpdateCategoryDTO updateCategoryDTO) {
         // 1. Tìm entity cũ trong DB
         Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
@@ -64,9 +64,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteById(Long id) {
         // Kiểm tra xem category có tồn tại không
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
-
+       if (!categoryRepository.existsById(id)){
+               throw new NotFoundException("Category not found with id: " + id);}
         // Xóa category nếu tồn tại
         categoryRepository.deleteById(id);
     }

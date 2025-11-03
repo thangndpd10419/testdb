@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -28,41 +29,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // 1. Lấy token từ header
-        final String authHeader = request.getHeader("Authorization");
-        final String token;
-        final String username;
+        try {
+            // 1. Lấy token từ header Authorization
+            String authHeader = request.getHeader("Authorization");
+            if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
+                String token = authHeader.substring(7);
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+                // 2. Validate token trước khi lấy username
+                if (jwtUtil.validateToken(token)) {
+                    String username = jwtUtil.getUsernameFromToken(token);
 
-        // 2. Cắt chuỗi token (bỏ "Bearer ")
-        token = authHeader.substring(7);
+                    // 3. Nếu username hợp lệ và chưa xác thực trước đó
+                    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        // 3. Lấy username từ token
-        username = jwtUtil.getUsernameFromToken(token);
+                        // 4. Tạo Authentication và set vào SecurityContext
+                        UsernamePasswordAuthenticationToken authToken =
+                                new UsernamePasswordAuthenticationToken(
+                                        userDetails,
+                                        null,
+                                        userDetails.getAuthorities()
+                                );
+                        authToken.setDetails(new org.springframework.security.web.authentication.WebAuthenticationDetailsSource()
+                                .buildDetails(request));
 
-        // 4. Nếu username hợp lệ và chưa xác thực trước đó
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-            // 5. Xác minh token hợp lệ
-            if (jwtUtil.validateToken(token)) {
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
-
-                // 6. Gắn thông tin xác thực vào SecurityContext
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                    }
+                }
             }
+        } catch (Exception ex) {
+            // Log lỗi hoặc xử lý token không hợp lệ
+            System.err.println("Cannot set user authentication: " + ex.getMessage());
         }
 
-        // 7. Cho request đi tiếp
+        // 5. Cho request đi tiếp
         filterChain.doFilter(request, response);
     }
 }

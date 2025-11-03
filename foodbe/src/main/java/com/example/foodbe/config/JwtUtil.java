@@ -5,6 +5,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
+
 import javax.crypto.SecretKey;
 import java.util.Date;
 
@@ -12,62 +13,64 @@ import java.util.Date;
 public class JwtUtil {
 
     @Value("${jwt.secret}")
-    private String secretKey;
+    private String secretKey;   // Chuỗi bí mật trong application.properties
 
     @Value("${jwt.expiration}")
-    private long jwtExpirationMs;
+    private long jwtExpirationMs; // Thời gian sống token (ms)
 
-    private SecretKey key;
+    private SecretKey key;      // SecretKey dùng để ký token
 
-    // Khởi tạo SecretKey từ secretKey (chuỗi) sau khi các giá trị đã được inject
+    // -----------------------------
+    // Khởi tạo SecretKey sau khi inject giá trị từ @Value
+    // -----------------------------
     @PostConstruct
     public void init() {
-        // Chuyển đổi chuỗi secretKey thành SecretKey (HS256 yêu cầu khóa dài ít nhất 256 bits)
+        // HS256 yêu cầu khóa ít nhất 256 bits → convert từ chuỗi
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    // Tạo token từ username
+    // -----------------------------
+    // Tạo token
+    // -----------------------------
     public String generateToken(String username) {
         return Jwts.builder()
-                .setSubject(username)                            // Username làm subject
-                .setIssuedAt(new Date())                         // Thời gian phát hành token
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))  // Hết hạn
-                .signWith(key, SignatureAlgorithm.HS256)         // Ký token với SecretKey
+                .setSubject(username)                      // Subject (thường là username)
+                .setIssuedAt(new Date())                   // Thời gian phát hành
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs)) // Exp
+                .signWith(key, SignatureAlgorithm.HS256)   // Tạo signature
                 .compact();
     }
 
+    // -----------------------------
     // Lấy username từ token
+    // -----------------------------
     public String getUsernameFromToken(String token) {
         try {
-            return Jwts.parser()                             // Dùng parser cũ (phù hợp với jjwt 0.11.x)
-                    .setSigningKey(key)                      // Sử dụng SecretKey
+            Claims claims = Jwts.parserBuilder()        // tạo parser để giải mã(decode) token
+                    .setSigningKey(key) // để xác định đúng secret tưc là đúng jwt
+                    .build()
                     .parseClaimsJws(token)
-                    .getBody()
-                    .getSubject();
+                    .getBody(); // lấy payload (cliam của token) claims = payload
+            return claims.getSubject(); // lấy giá trị sub trong payload là username
         } catch (JwtException e) {
-            System.err.println("Error while parsing token: " + e.getMessage());
-            return null;  // Token không hợp lệ
+            System.err.println("Error parsing token: " + e.getMessage());
+            return null; // Token không hợp lệ
         }
     }
 
-    // Kiểm tra token hợp lệ chưa
+    // -----------------------------
+    // Validate token
+    // -----------------------------
     public boolean validateToken(String token) {
         try {
-            Jwts.parser()                                   // Dùng parser cũ (phù hợp với jjwt 0.11.x)
-                    .setSigningKey(key)                       // Sử dụng SecretKey
-                    .parseClaimsJws(token);                   // Kiểm tra tính hợp lệ của token
-            return true;  // Token hợp lệ
-        } catch (SignatureException e) {
-            System.err.println("Invalid JWT signature: " + e.getMessage());
-        } catch (MalformedJwtException e) {
-            System.err.println("Invalid JWT token: " + e.getMessage());
-        } catch (ExpiredJwtException e) {
-            System.err.println("JWT token expired: " + e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            System.err.println("JWT token unsupported: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            System.err.println("JWT claims string empty: " + e.getMessage());
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token); // Nếu parse ok → token hợp lệ
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            System.err.println("JWT validation error: " + e.getMessage());
         }
-        return false;  // Token không hợp lệ
+        return false;
     }
 }

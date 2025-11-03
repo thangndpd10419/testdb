@@ -28,19 +28,19 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public  ResponseEntity<ApiResponse<CategoryResponseDTO>> getById(@Valid @PathVariable Long id){
+    public  ResponseEntity<ApiResponse<CategoryResponseDTO>> getById( @PathVariable Long id){
         return ResponseEntity.ok(ApiResponse.success(categoryService.findById(id)));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(@RequestBody CreateCategoryDTO createCategoryDTO){
+    public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(@Valid @RequestBody CreateCategoryDTO createCategoryDTO){
         return ResponseEntity.ok(ApiResponse.success(categoryService.create(createCategoryDTO)));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> updateById(@PathVariable Long id,
                                          @Valid @RequestBody UpdateCategoryDTO updateCategoryDTO){
-        return ResponseEntity.ok(ApiResponse.success(categoryService.update(id,updateCategoryDTO)));
+        return ResponseEntity.ok(ApiResponse.success(categoryService.updateById(id,updateCategoryDTO)));
     }
 
     @DeleteMapping("/{id}")

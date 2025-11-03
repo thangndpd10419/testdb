@@ -3,6 +3,7 @@ package com.example.foodbe.dto.user;
 import com.example.foodbe.models.Role;
 import lombok.*;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -18,6 +19,7 @@ public class UserCreateDTO {
     @NotNull(message = "age not empty")
     private int age;
     @NotBlank(message = "email not empty")
+    @Email
     private String email;
     @NotBlank(message = "pass not empty")
     private String password;

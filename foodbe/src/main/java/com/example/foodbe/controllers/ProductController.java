@@ -3,8 +3,11 @@ package com.example.foodbe.controllers;
 
 import com.example.foodbe.dto.product.CreateProductDTO;
 import com.example.foodbe.dto.product.ProductResponseDTO;
+import com.example.foodbe.dto.product.UpdateProductDTO;
+import com.example.foodbe.payload.ApiResponse;
 import com.example.foodbe.services.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,16 +20,30 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public List<ProductResponseDTO> getAll(){
-        return productService.findAll();
+    public ResponseEntity<ApiResponse<List<ProductResponseDTO>>> getAll(){
+        return ResponseEntity.ok(ApiResponse.success(productService.findAll()));
     }
+
+
     @GetMapping("/{id}")
-    public ProductResponseDTO getById( @PathVariable Long id){
-        return productService.findById(id);
+    public ResponseEntity<ApiResponse<ProductResponseDTO>> getById( @PathVariable Long id){
+        return ResponseEntity.ok(ApiResponse.success(productService.findById(id)));
     }
 
     @PostMapping
-    public ProductResponseDTO create(@Valid @RequestBody CreateProductDTO createProductDTO){
-        return productService.create(createProductDTO);
+    public ResponseEntity<ApiResponse<ProductResponseDTO>> create(@Valid @RequestBody CreateProductDTO createProductDTO){
+        return ResponseEntity.ok(ApiResponse.success(productService.create(createProductDTO)));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<ProductResponseDTO>> updateById(@PathVariable Long id, @Valid @RequestBody UpdateProductDTO updateProductDTO){
+        return ResponseEntity.ok(ApiResponse.success(productService.updateById(id, updateProductDTO)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<String>> deleteById(@PathVariable Long id){
+        productService.deleteById(id);
+        return ResponseEntity.ok(ApiResponse.success("Xoa thanh cong product tai id: "+id));
+    }
+
 }

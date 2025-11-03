@@ -17,5 +17,5 @@ public class ProductResponseDTO {
     private BigDecimal price;
     private String imgProduct;
     private String description;
-    private CategoryReferenceDTO categoryReferenceDTO;
+    private Long idCategory;
 }

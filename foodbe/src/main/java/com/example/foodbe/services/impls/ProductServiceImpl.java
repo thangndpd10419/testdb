@@ -2,6 +2,8 @@ package com.example.foodbe.services.impls;
 
 import com.example.foodbe.dto.product.CreateProductDTO;
 import com.example.foodbe.dto.product.ProductResponseDTO;
+import com.example.foodbe.dto.product.UpdateProductDTO;
+import com.example.foodbe.exception.NotFoundException;
 import com.example.foodbe.mapper.CategoryMapper;
 import com.example.foodbe.mapper.ProductMapper;
 import com.example.foodbe.models.Category;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -40,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDTO findById(Long id) {
         Product product= productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+                .orElseThrow(() ->new NotFoundException("product not found with id: "+id));
         return productMapper.toDto(product);
     }
 
@@ -49,9 +52,25 @@ public class ProductServiceImpl implements ProductService {
         // Log giá trị imgProduct
         System.out.println("===> imgProduct received: " + createProductDTO.getImgProduct());
         Category category= categoryRepository.findById(createProductDTO.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found with id: " + createProductDTO.getCategoryId()));
+                .orElseThrow(() -> new NotFoundException("Category not found with id: " + createProductDTO.getCategoryId()));
         Product product= productMapper.toEntity(createProductDTO,category);
 
         return productMapper.toDto(productRepository.save(product));
+    }
+
+    @Override
+    public ProductResponseDTO updateById(Long id,UpdateProductDTO updateProductDTO) {
+       Product product= productRepository.findById(id)
+               .orElseThrow(()-> new NotFoundException("product  notfound with id: "+id));
+       productMapper.UpdateEntityFromDto(updateProductDTO,product);
+       productRepository.save(product);
+        return productMapper.toDto(product);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+       if(!productRepository.existsById(id))
+                throw new NotFoundException("product  notfound with id: "+id);
+        productRepository.deleteById(id);
     }
 }

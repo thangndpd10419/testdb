@@ -13,6 +13,6 @@ public interface CategoryService {
 
     CategoryResponseDTO findById(Long id);
     CategoryResponseDTO create(CreateCategoryDTO createCategoryDTO);
-    CategoryResponseDTO update(Long id,UpdateCategoryDTO updateCategoryDTO);
+    CategoryResponseDTO updateById(Long id,UpdateCategoryDTO updateCategoryDTO);
     void deleteById(Long id);
 }

@@ -3,6 +3,7 @@ package com.example.foodbe.mapper;
 
 import com.example.foodbe.dto.product.CreateProductDTO;
 import com.example.foodbe.dto.product.ProductResponseDTO;
+import com.example.foodbe.dto.product.UpdateProductDTO;
 import com.example.foodbe.models.Category;
 import com.example.foodbe.models.Product;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class ProductMapper {
                 .price(product.getPrice())
                 .imgProduct(product.getImgProduct())
                 .description(product.getDescription())
-                .categoryReferenceDTO(categoryMapper.toReference(product.getCategory()))
+                .idCategory(product.getCategory().getId())
                 .build();
     }
 
@@ -37,6 +38,16 @@ public class ProductMapper {
                 .category(category)
                 .build();
     }
+
+    public void UpdateEntityFromDto(UpdateProductDTO updateProductDTO, Product product){
+        if(updateProductDTO == null || product==null ) return;
+        product.setName(updateProductDTO.getName());
+        product.setSlug(updateProductDTO.getSlug());
+        product.setImgProduct(updateProductDTO.getImgProduct());
+        product.setPrice(updateProductDTO.getPrice());
+        product.setDescription(updateProductDTO.getDescription());
+    }
+
 
 
 }
