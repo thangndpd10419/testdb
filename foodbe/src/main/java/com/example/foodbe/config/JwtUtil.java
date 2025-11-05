@@ -38,7 +38,7 @@ public class JwtUtil {
                 .setIssuedAt(new Date())                   // Thời gian phát hành
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs)) // Exp
                 .signWith(key, SignatureAlgorithm.HS256)   // Tạo signature
-                .compact();
+                .compact(); // gộp 3 phần lại thành jwt
     }
 
     // -----------------------------

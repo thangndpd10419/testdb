@@ -8,6 +8,7 @@ import com.example.foodbe.payload.ApiResponse;
 import com.example.foodbe.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,16 +31,19 @@ public class ProductController {
         return ResponseEntity.ok(ApiResponse.success(productService.findById(id)));
     }
 
+    @PreAuthorize("hasRole('Admin')")
     @PostMapping
     public ResponseEntity<ApiResponse<ProductResponseDTO>> create(@Valid @RequestBody CreateProductDTO createProductDTO){
         return ResponseEntity.ok(ApiResponse.success(productService.create(createProductDTO)));
     }
 
+    @PreAuthorize("hasRole('Admin')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ProductResponseDTO>> updateById(@PathVariable Long id, @Valid @RequestBody UpdateProductDTO updateProductDTO){
         return ResponseEntity.ok(ApiResponse.success(productService.updateById(id, updateProductDTO)));
     }
 
+    @PreAuthorize("hasRole('Admin')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteById(@PathVariable Long id){
         productService.deleteById(id);

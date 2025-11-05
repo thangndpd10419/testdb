@@ -8,6 +8,7 @@ import com.example.foodbe.payload.ApiResponse;
 import com.example.foodbe.services.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,16 +26,19 @@ public class ReviewController {
         return ResponseEntity.ok(ApiResponse.success(reviewService.findAll()));
     }
 
+    @PreAuthorize("hasRole('User')")
     @PostMapping
     public ResponseEntity<ApiResponse<ReviewResponseDto>> create(@Valid @RequestBody CreateReviewDto createReviewDto){
         return ResponseEntity.ok(ApiResponse.success(reviewService.create(createReviewDto)));
     }
 
+    @PreAuthorize("hasRole('User')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ReviewResponseDto>> updateById(@PathVariable Long id, @Valid @RequestBody UpdateReviewDto updateReviewDto){
         return ResponseEntity.ok(ApiResponse.success(reviewService.updateById(id,updateReviewDto)));
     }
 
+    @PreAuthorize("hasRole('User')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteById(@PathVariable Long id){
         reviewService.deleteById(id);

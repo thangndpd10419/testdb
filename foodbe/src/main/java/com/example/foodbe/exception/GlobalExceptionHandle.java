@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import org.springframework.security.access.AccessDeniedException;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
@@ -43,5 +44,14 @@ public class GlobalExceptionHandle {
         );
         ErrorResponse errorResponse = new ErrorResponse("BAD_REQUEST", message.toString(),LocalDateTime.now());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    // xử lý lỗi 403 với phân quyền authorization
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDenied (AccessDeniedException ex){
+        ErrorResponse errorResponse= new ErrorResponse("FORBIDDEN-403",
+                "Bạn không có quyền truy cập",
+                LocalDateTime.now());
+        return new ResponseEntity<>(errorResponse,HttpStatus.FORBIDDEN);
     }
 }
