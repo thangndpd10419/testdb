@@ -1,4 +1,4 @@
-package com.example.foodbe.dto.Auth;
+package com.example.foodbe.dto.auth;
 
 
 public class AuthRequest {

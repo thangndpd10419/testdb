@@ -1,10 +1,9 @@
 package com.example.foodbe.services.impls;
 
-import com.example.foodbe.dto.CategoryRequestDTO;
 import com.example.foodbe.dto.category.CategoryResponseDTO;
 import com.example.foodbe.dto.category.CreateCategoryDTO;
 import com.example.foodbe.dto.category.UpdateCategoryDTO;
-import com.example.foodbe.exception.NotFoundException;
+import com.example.foodbe.exception_handler.NotFoundException;
 import com.example.foodbe.mapper.CategoryMapper;
 import com.example.foodbe.models.Category;
 import com.example.foodbe.repositories.CategoryRepository;

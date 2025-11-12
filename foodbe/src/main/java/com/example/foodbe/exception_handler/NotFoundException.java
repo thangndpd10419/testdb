@@ -1,4 +1,4 @@
-package com.example.foodbe.exception;
+package com.example.foodbe.exception_handler;
 
 public class NotFoundException extends RuntimeException{
     public NotFoundException(String message){

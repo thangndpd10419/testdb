@@ -3,8 +3,7 @@ package com.example.foodbe.services.impls;
 import com.example.foodbe.dto.product.CreateProductDTO;
 import com.example.foodbe.dto.product.ProductResponseDTO;
 import com.example.foodbe.dto.product.UpdateProductDTO;
-import com.example.foodbe.exception.NotFoundException;
-import com.example.foodbe.mapper.CategoryMapper;
+import com.example.foodbe.exception_handler.NotFoundException;
 import com.example.foodbe.mapper.ProductMapper;
 import com.example.foodbe.models.Category;
 import com.example.foodbe.models.Product;
@@ -12,11 +11,9 @@ import com.example.foodbe.repositories.CategoryRepository;
 import com.example.foodbe.repositories.ProductRepository;
 import com.example.foodbe.services.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 

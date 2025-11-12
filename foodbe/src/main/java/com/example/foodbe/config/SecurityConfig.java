@@ -39,11 +39,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Không dùng session
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login").permitAll() // Cho phép login không cần auth
-                        .requestMatchers(HttpMethod.GET,"/api/categories/**").permitAll()
+                        .requestMatchers(SecurityConstant.WHITE_LIST).permitAll() // requestMathches nhận string, nhiều string hoặc array string
+                        .requestMatchers(HttpMethod.GET,"/api/categories/**","/api/products/**","/api/reviews/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
                         .anyRequest().authenticated()
                 )
 

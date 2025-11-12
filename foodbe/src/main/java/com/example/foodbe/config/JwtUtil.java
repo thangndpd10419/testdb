@@ -3,11 +3,14 @@ package com.example.foodbe.config;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtUtil {
@@ -20,57 +23,100 @@ public class JwtUtil {
 
     private SecretKey key;      // SecretKey dùng để ký token
 
-    // -----------------------------
     // Khởi tạo SecretKey sau khi inject giá trị từ @Value
-    // -----------------------------
     @PostConstruct
     public void init() {
         // HS256 yêu cầu khóa ít nhất 256 bits → convert từ chuỗi
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    // -----------------------------
-    // Tạo token
-    // -----------------------------
-    public String generateToken(String username) {
+    // Tạo token với danh sách roles
+    public String generateToken(String username, List<String> role) {
         return Jwts.builder()
                 .setSubject(username)                      // Subject (thường là username)
+                .claim("role", role)                      // Gán danh sách roles
                 .setIssuedAt(new Date())                   // Thời gian phát hành
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs)) // Exp
+                .setExpiration(Date.from(Instant.now().plus(jwtExpirationMs, ChronoUnit.MILLIS))) // Expiration
                 .signWith(key, SignatureAlgorithm.HS256)   // Tạo signature
-                .compact(); // gộp 3 phần lại thành jwt
+                .compact(); // Gộp 3 phần lại thành JWT
     }
 
-    // -----------------------------
     // Lấy username từ token
-    // -----------------------------
     public String getUsernameFromToken(String token) {
         try {
-            Claims claims = Jwts.parserBuilder()        // tạo parser để giải mã(decode) token
-                    .setSigningKey(key) // để xác định đúng secret tưc là đúng jwt
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token)
-                    .getBody(); // lấy payload (cliam của token) claims = payload
-            return claims.getSubject(); // lấy giá trị sub trong payload là username
+                    .getBody(); // Lấy payload (claims) của token
+            return claims.getSubject(); // Trả về giá trị subject trong payload (thường là username)
         } catch (JwtException e) {
-            System.err.println("Error parsing token: " + e.getMessage());
+            // Log lỗi chung chung, không log chi tiết
+            System.err.println("Error parsing token");
             return null; // Token không hợp lệ
         }
     }
 
-    // -----------------------------
+    // Lấy roles từ token
+    public List<String> getRolesFromToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return (List<String>) claims.get("role"); // Trả về role từ token (dưới dạng List)
+        } catch (JwtException e) {
+            System.err.println("Error parsing token roles");
+            return null;
+        }
+    }
+
+    // Kiểm tra token đã hết hạn chưa
+    public boolean isTokenExpired(String token) {
+        try {
+            Date expiration = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getExpiration();
+            return expiration.before(new Date());
+        } catch (JwtException e) {
+            System.err.println("Error checking token expiration");
+            return true;  // Nếu có lỗi thì coi như token đã hết hạn
+        }
+    }
+
     // Validate token
-    // -----------------------------
     public boolean validateToken(String token) {
         try {
+            // Kiểm tra token có hợp lệ và không hết hạn
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
-                    .parseClaimsJws(token); // Nếu parse ok → token hợp lệ
-            return true;
+                    .parseClaimsJws(token);  // Nếu parse thành công → token hợp lệ
+            return !isTokenExpired(token);  // Kiểm tra nếu token chưa hết hạn
         } catch (JwtException | IllegalArgumentException e) {
-            System.err.println("JWT validation error: " + e.getMessage());
+            // Log lỗi chung chung
+            System.err.println("JWT validation error");
+            return false;
         }
-        return false;
+    }
+
+    // lấy thời gian hết hạn trong token
+    public Date extractExpiration(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getExpiration();
+
+        }catch (JwtException e){
+            System.err.println("JWT validation error");
+            return null;
+        }
     }
 }

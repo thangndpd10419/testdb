@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +15,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -39,20 +42,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if (jwtUtil.validateToken(token)) {
                     String username = jwtUtil.getUsernameFromToken(token);
 
-                    // 3. Nếu username hợp lệ và chưa xác thực trước đó
+                    // 3. Nếu token hợp lệ và chưa xác thực trước đó
                     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                        // 4. Tạo một Authentication với thông tin lấy từ token
+                        // Bạn có thể lấy roles trực tiếp từ token mà không cần phải load lại UserDetails từ DB
+                        List<String> roles = jwtUtil.getRolesFromToken(token);  // lấy quyền từ token
 
-                        // 4. Tạo Authentication và set vào SecurityContext
+                        // Tạo Authentication từ token và gắn vào SecurityContext
                         UsernamePasswordAuthenticationToken authToken =
                                 new UsernamePasswordAuthenticationToken(
-                                        userDetails,
-                                        null,
-                                        userDetails.getAuthorities()
+                                        username,  // username từ token
+                                        null,  // Password không cần thiết, JWT đã xác thực rồi
+                                        roles.stream().map(r->new SimpleGrantedAuthority(r)).collect(Collectors.toList())  // chuyển roles thành GrantedAuthority
                                 );
                         authToken.setDetails(new org.springframework.security.web.authentication.WebAuthenticationDetailsSource()
-                                .buildDetails(request));
+                                .buildDetails(request)); // thêm các dữ liệu khác: như địa chỉ id,...
 
+                        // Gắn authentication vào SecurityContext
                         SecurityContextHolder.getContext().setAuthentication(authToken);
                     }
                 }
@@ -66,3 +72,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+

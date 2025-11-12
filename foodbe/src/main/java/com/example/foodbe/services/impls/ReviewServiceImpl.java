@@ -3,7 +3,7 @@ package com.example.foodbe.services.impls;
 import com.example.foodbe.dto.review.CreateReviewDto;
 import com.example.foodbe.dto.review.ReviewResponseDto;
 import com.example.foodbe.dto.review.UpdateReviewDto;
-import com.example.foodbe.exception.NotFoundException;
+import com.example.foodbe.exception_handler.NotFoundException;
 import com.example.foodbe.mapper.ReviewMapper;
 import com.example.foodbe.models.AppUser;
 import com.example.foodbe.models.Product;

@@ -1,4 +1,4 @@
-package com.example.foodbe.exception;
+package com.example.foodbe.exception_handler;
 
 
 import lombok.AllArgsConstructor;
