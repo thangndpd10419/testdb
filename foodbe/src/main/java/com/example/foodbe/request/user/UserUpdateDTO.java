@@ -1,4 +1,4 @@
-package com.example.foodbe.dto.user;
+package com.example.foodbe.request.user;
 
 public class UserUpdateDTO {
 }

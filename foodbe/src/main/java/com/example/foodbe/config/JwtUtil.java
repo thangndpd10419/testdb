@@ -94,9 +94,10 @@ public class JwtUtil {
             // Kiểm tra token có hợp lệ và không hết hạn
             Jwts.parserBuilder()
                     .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);  // Nếu parse thành công → token hợp lệ
-            return !isTokenExpired(token);  // Kiểm tra nếu token chưa hết hạn
+                    .build() // tạo 1 đối tương jwtParse chưa secret key sẵn sàng validate
+                    .parseClaimsJws(token);  // tác token ra 3 phần, lấy header payload để tạo signature mới với secret key trong serve, so sanh signature vừa tạo và signature token. kiểm tra thời gian hết hạn token.
+            return true;
+//            return !isTokenExpired(token);  // Kiểm tra nếu token chưa hết hạn
         } catch (JwtException | IllegalArgumentException e) {
             // Log lỗi chung chung
             System.err.println("JWT validation error");

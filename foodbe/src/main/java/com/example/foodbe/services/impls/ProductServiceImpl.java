@@ -1,8 +1,8 @@
 package com.example.foodbe.services.impls;
 
-import com.example.foodbe.dto.product.CreateProductDTO;
-import com.example.foodbe.dto.product.ProductResponseDTO;
-import com.example.foodbe.dto.product.UpdateProductDTO;
+import com.example.foodbe.request.product.CreateProductDTO;
+import com.example.foodbe.response.product.ProductResponseDTO;
+import com.example.foodbe.request.product.UpdateProductDTO;
 import com.example.foodbe.exception_handler.NotFoundException;
 import com.example.foodbe.mapper.ProductMapper;
 import com.example.foodbe.models.Category;

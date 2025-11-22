@@ -1,6 +1,5 @@
 package com.example.foodbe.repositories;
 
-import com.example.foodbe.dto.user.UserResponseDTO;
 import com.example.foodbe.models.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,10 +1,13 @@
-package com.example.foodbe.dto.auth;
+package com.example.foodbe.request.auth;
 
+
+import com.example.foodbe.annotation.Trim;
 
 public class AuthRequest {
     // DTO nhận dữ liệu login
-
+        @Trim
         private String email;
+        @Trim
         private String password;
 
         // getters, setters

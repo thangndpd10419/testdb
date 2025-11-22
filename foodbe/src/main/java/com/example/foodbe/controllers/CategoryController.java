@@ -1,11 +1,9 @@
 package com.example.foodbe.controllers;
 
 
-import com.example.foodbe.dto.CategoryRequestDTO;
-import com.example.foodbe.dto.category.CategoryResponseDTO;
-import com.example.foodbe.dto.category.CreateCategoryDTO;
-import com.example.foodbe.dto.category.UpdateCategoryDTO;
-import com.example.foodbe.models.Category;
+import com.example.foodbe.response.category.CategoryResponseDTO;
+import com.example.foodbe.request.category.CreateCategoryDTO;
+import com.example.foodbe.request.category.UpdateCategoryDTO;
 import com.example.foodbe.payload.ApiResponse;
 import com.example.foodbe.services.CategoryService;
 import lombok.RequiredArgsConstructor;

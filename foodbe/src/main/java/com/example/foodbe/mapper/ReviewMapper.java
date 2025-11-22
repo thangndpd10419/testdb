@@ -1,8 +1,8 @@
 package com.example.foodbe.mapper;
 
-import com.example.foodbe.dto.review.CreateReviewDto;
-import com.example.foodbe.dto.review.ReviewResponseDto;
-import com.example.foodbe.dto.review.UpdateReviewDto;
+import com.example.foodbe.request.review.CreateReviewDto;
+import com.example.foodbe.response.review.ReviewResponseDto;
+import com.example.foodbe.request.review.UpdateReviewDto;
 import com.example.foodbe.models.AppUser;
 import com.example.foodbe.models.Product;
 import com.example.foodbe.models.Review;

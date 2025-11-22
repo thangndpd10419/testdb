@@ -1,7 +1,6 @@
-package com.example.foodbe.dto.product;
+package com.example.foodbe.request.product;
 
-import com.example.foodbe.dto.category.CategoryReferenceDTO;
-import com.example.foodbe.models.Category;
+import com.example.foodbe.annotation.FormatWhitespace;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -12,9 +11,10 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class UpdateProductDTO {
+
+    @FormatWhitespace
     @NotBlank(message = "product name not empty")
     private String name;
     @NotBlank(message = "product slug not empty")

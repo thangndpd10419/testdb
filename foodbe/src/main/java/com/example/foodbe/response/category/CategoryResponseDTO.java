@@ -1,4 +1,4 @@
-package com.example.foodbe.dto.category;
+package com.example.foodbe.response.category;
 
 import lombok.*;
 
@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 
     @Getter
     @Setter
-    @NoArgsConstructor
     @AllArgsConstructor
     @Builder
 public class CategoryResponseDTO {

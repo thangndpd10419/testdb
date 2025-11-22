@@ -1,16 +1,18 @@
 package com.example.foodbe.services.impls;
 
-import com.example.foodbe.dto.user.UserCreateDTO;
-import com.example.foodbe.dto.user.UserResponseDTO;
+import com.example.foodbe.request.user.UserCreateDTO;
+import com.example.foodbe.response.user.UserResponseDTO;
 import com.example.foodbe.mapper.UserMapper;
 import com.example.foodbe.models.AppUser;
 import com.example.foodbe.repositories.UserRepository;
 import com.example.foodbe.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,4 +56,13 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.toDto(userRepository.save(user));
     }
+
+    @Override
+    public AppUser findByEmail(String email) {
+        AppUser appUser= userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(email));
+        return appUser;
+    }
+    // optional dùng khi dữ liệu trả về có thể null( search,..)
+    // trả về đúng và bắt execptin khi dữ liệu trả về phải có mới hoạt đọng tiếp
 }

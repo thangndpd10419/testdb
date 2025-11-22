@@ -1,9 +1,9 @@
 package com.example.foodbe.controllers;
 
 
-import com.example.foodbe.dto.product.CreateProductDTO;
-import com.example.foodbe.dto.product.ProductResponseDTO;
-import com.example.foodbe.dto.product.UpdateProductDTO;
+import com.example.foodbe.request.product.CreateProductDTO;
+import com.example.foodbe.response.product.ProductResponseDTO;
+import com.example.foodbe.request.product.UpdateProductDTO;
 import com.example.foodbe.payload.ApiResponse;
 import com.example.foodbe.services.ProductService;
 import lombok.RequiredArgsConstructor;

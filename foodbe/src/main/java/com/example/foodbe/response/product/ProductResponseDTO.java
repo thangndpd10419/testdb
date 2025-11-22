@@ -1,13 +1,11 @@
-package com.example.foodbe.dto.product;
+package com.example.foodbe.response.product;
 
-import com.example.foodbe.dto.category.CategoryReferenceDTO;
 import lombok.*;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class ProductResponseDTO {

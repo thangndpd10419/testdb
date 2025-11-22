@@ -1,4 +1,4 @@
-package com.example.foodbe.dto.auth;
+package com.example.foodbe.response.auth;
 
 import lombok.*;
 
@@ -8,11 +8,10 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class AuthResponse {
-    private String token;
-    private String tokenType;
+    private String accessToken;
+    private String refreshToken;
     private List<String> roles;
-    private Instant expiresAt;
+
 }

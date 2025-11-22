@@ -1,4 +1,4 @@
-package com.example.foodbe.dto.review;
+package com.example.foodbe.request.review;
 
 import lombok.*;
 
@@ -6,7 +6,6 @@ import javax.validation.constraints.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class CreateReviewDto {

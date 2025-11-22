@@ -1,9 +1,9 @@
 package com.example.foodbe.controllers;
 
 
-import com.example.foodbe.dto.review.CreateReviewDto;
-import com.example.foodbe.dto.review.ReviewResponseDto;
-import com.example.foodbe.dto.review.UpdateReviewDto;
+import com.example.foodbe.request.review.CreateReviewDto;
+import com.example.foodbe.response.review.ReviewResponseDto;
+import com.example.foodbe.request.review.UpdateReviewDto;
 import com.example.foodbe.payload.ApiResponse;
 import com.example.foodbe.services.ReviewService;
 import lombok.RequiredArgsConstructor;

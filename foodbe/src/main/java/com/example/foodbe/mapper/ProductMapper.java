@@ -1,9 +1,9 @@
 package com.example.foodbe.mapper;
 
 
-import com.example.foodbe.dto.product.CreateProductDTO;
-import com.example.foodbe.dto.product.ProductResponseDTO;
-import com.example.foodbe.dto.product.UpdateProductDTO;
+import com.example.foodbe.request.product.CreateProductDTO;
+import com.example.foodbe.response.product.ProductResponseDTO;
+import com.example.foodbe.request.product.UpdateProductDTO;
 import com.example.foodbe.models.Category;
 import com.example.foodbe.models.Product;
 import lombok.RequiredArgsConstructor;

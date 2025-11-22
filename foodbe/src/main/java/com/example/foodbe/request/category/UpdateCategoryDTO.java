@@ -1,17 +1,17 @@
-package com.example.foodbe.dto.category;
+package com.example.foodbe.request.category;
 
+import com.example.foodbe.annotation.FormatWhitespace;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class UpdateCategoryDTO {
 
+    @FormatWhitespace
     @NotBlank(message = "name not null")
     private String name;
 

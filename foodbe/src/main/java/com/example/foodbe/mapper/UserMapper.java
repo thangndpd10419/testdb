@@ -1,8 +1,8 @@
 package com.example.foodbe.mapper;
 
 
-import com.example.foodbe.dto.user.UserCreateDTO;
-import com.example.foodbe.dto.user.UserResponseDTO;
+import com.example.foodbe.request.user.UserCreateDTO;
+import com.example.foodbe.response.user.UserResponseDTO;
 import com.example.foodbe.models.AppUser;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.example.foodbe.dto.user;
+package com.example.foodbe.response.user;
 
 import com.example.foodbe.models.Role;
 import lombok.*;
@@ -6,7 +6,6 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class UserResponseDTO {
     private Long id;

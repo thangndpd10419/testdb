@@ -1,9 +1,8 @@
 package com.example.foodbe.services;
 
-import com.example.foodbe.dto.CategoryRequestDTO;
-import com.example.foodbe.dto.category.CategoryResponseDTO;
-import com.example.foodbe.dto.category.CreateCategoryDTO;
-import com.example.foodbe.dto.category.UpdateCategoryDTO;
+import com.example.foodbe.response.category.CategoryResponseDTO;
+import com.example.foodbe.request.category.CreateCategoryDTO;
+import com.example.foodbe.request.category.UpdateCategoryDTO;
 
 import java.util.List;
 
