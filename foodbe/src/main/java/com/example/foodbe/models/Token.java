@@ -23,7 +23,7 @@ public class Token {
     @JoinColumn(name = "user_id", nullable = false)
     private AppUser appUser;
     @Column(nullable = false)
-    private LocalDateTime expires_at;
+    private LocalDateTime expiresAt;
     @CreationTimestamp
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 }

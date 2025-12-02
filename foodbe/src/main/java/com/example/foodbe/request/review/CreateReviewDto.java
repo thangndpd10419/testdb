@@ -10,13 +10,15 @@ import javax.validation.constraints.*;
 @Builder
 public class CreateReviewDto {
 
-    @Min(value = 1, message = "Rating phải từ 1 đến 5")
-    @Max(value = 5, message = "Rating phải từ 1 đến 5")
+    @Min(value = 1, message = "{entity.size.min}")
+    @Max(value = 5, message = "{entity.size.max}")
     private int rating;           // Điểm đánh giá 1-5
-    @NotBlank(message = "Comment không được để trống")
-    @Size(max = 500, message = "Comment không quá 500 ký tự")
+
+    @NotBlank(message = "{entity.name.required}")
+    @Size(max = 500, message = "{entity.size.max}")
     private String comment;       // Nội dung đánh giá
-    @NotNull
+
+    @NotNull(message = "{entity.number.not.null}")
     private Long productId;       // ID sản phẩm được đánh giá
     // private Long userId;       // Có thể lấy từ token, không cần client gửi
 }

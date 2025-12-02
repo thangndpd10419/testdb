@@ -10,6 +10,7 @@ import com.example.foodbe.models.Product;
 import com.example.foodbe.repositories.CategoryRepository;
 import com.example.foodbe.repositories.ProductRepository;
 import com.example.foodbe.services.ProductService;
+import com.example.foodbe.utils.ConstantUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -40,16 +41,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDTO findById(Long id) {
         Product product= productRepository.findById(id)
-                .orElseThrow(() ->new NotFoundException("product not found with id: "+id));
+                .orElseThrow(() ->new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND +id));
         return productMapper.toDto(product);
     }
 
     @Override
     public ProductResponseDTO create(CreateProductDTO createProductDTO) {
-        // Log giá trị imgProduct
-        System.out.println("===> imgProduct received: " + createProductDTO.getImgProduct());
         Category category= categoryRepository.findById(createProductDTO.getCategoryId())
-                .orElseThrow(() -> new NotFoundException("Category not found with id: " + createProductDTO.getCategoryId()));
+                .orElseThrow(() -> new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND + createProductDTO.getCategoryId()));
         Product product= productMapper.toEntity(createProductDTO,category);
 
         return productMapper.toDto(productRepository.save(product));
@@ -58,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDTO updateById(Long id,UpdateProductDTO updateProductDTO) {
        Product product= productRepository.findById(id)
-               .orElseThrow(()-> new NotFoundException("product  notfound with id: "+id));
+               .orElseThrow(()-> new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND+id));
        productMapper.UpdateEntityFromDto(updateProductDTO,product);
        productRepository.save(product);
         return productMapper.toDto(product);
@@ -67,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteById(Long id) {
        if(!productRepository.existsById(id))
-                throw new NotFoundException("product  notfound with id: "+id);
+                throw new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND+id);
         productRepository.deleteById(id);
     }
 }

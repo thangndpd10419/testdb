@@ -12,6 +12,7 @@ import com.example.foodbe.repositories.ProductRepository;
 import com.example.foodbe.repositories.ReviewRepository;
 import com.example.foodbe.repositories.UserRepository;
 import com.example.foodbe.services.ReviewService;
+import com.example.foodbe.utils.ConstantUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,9 +49,9 @@ public class ReviewServiceImpl implements ReviewService {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         String email= authentication.getName();
         AppUser appUser= userRepository.findByEmail(email)
-                .orElseThrow(()-> new NotFoundException("User not found with email: "+email));
+                .orElseThrow(()-> new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND +email));
         Product product= productRepository.findById(createReviewDto.getProductId())
-                .orElseThrow(()-> new NotFoundException("product not found with id: "+createReviewDto.getProductId()));
+                .orElseThrow(()-> new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND +createReviewDto.getProductId()));
 
         Review review= reviewMapper.toEntity(createReviewDto, appUser, product);
         return reviewMapper.toDto(reviewRepository.save(review));
@@ -59,7 +60,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResponseDto updateById(Long id, UpdateReviewDto updateReviewDto) {
         Review review = reviewRepository.findById(id)
-                .orElseThrow(()-> new NotFoundException("review not found with id: "+id));
+                .orElseThrow(()-> new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND+id));
         reviewMapper.updateDtoFromEntity(review, updateReviewDto);
 
         return reviewMapper.toDto(reviewRepository.save(review));
@@ -68,7 +69,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteById(Long id) {
         Review review = reviewRepository.findById(id)
-                .orElseThrow(()-> new NotFoundException("review not found with id: "+id));
+                .orElseThrow(()-> new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND +id));
         reviewRepository.deleteById(id);
     }
 }

@@ -1,17 +1,23 @@
 package com.example.foodbe.services.impls;
 
+import com.example.foodbe.payload.PageResponse;
+import com.example.foodbe.request.category.UpdateCategoryDTO;
 import com.example.foodbe.response.category.CategoryResponseDTO;
 import com.example.foodbe.request.category.CreateCategoryDTO;
-import com.example.foodbe.request.category.UpdateCategoryDTO;
 import com.example.foodbe.exception_handler.NotFoundException;
 import com.example.foodbe.mapper.CategoryMapper;
 import com.example.foodbe.models.Category;
 import com.example.foodbe.repositories.CategoryRepository;
 import com.example.foodbe.services.CategoryService;
+import com.example.foodbe.utils.ConstantUtils;
+import com.example.foodbe.utils.PageMapperUtils2;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final PageMapperUtils2 pageMapperUtils2;
 
     @Override
     public List<CategoryResponseDTO> findAll() {
@@ -32,10 +39,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     }
 
+
+    @Override
+    public PageResponse<CategoryResponseDTO> findByNameContaining( String name, Pageable pageable) {
+        Page<Category> page = categoryRepository.findByNameContaining(name, pageable);
+        Function<Category, CategoryResponseDTO> mapper = categoryMapper::toDTO;
+        return pageMapperUtils2.toPageResponseDto(page,mapper);
+    }
+
     @Override
     public CategoryResponseDTO findById(Long id) {
       Category category=  categoryRepository.findById(id)
-               .orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
+               .orElseThrow(() -> new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND + id));
      return categoryMapper.toDTO(category);
     }
 
@@ -47,10 +62,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponseDTO updateById(Long id,UpdateCategoryDTO updateCategoryDTO) {
+    public CategoryResponseDTO updateById(Long id, UpdateCategoryDTO updateCategoryDTO) {
         // 1. Tìm entity cũ trong DB
         Category existingCategory = categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND + id));
 
         // cập nhật
         categoryMapper.updateEntityFromDto(updateCategoryDTO,existingCategory);
@@ -64,7 +79,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteById(Long id) {
         // Kiểm tra xem category có tồn tại không
        if (!categoryRepository.existsById(id)){
-               throw new NotFoundException("Category not found with id: " + id);}
+               throw new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND + id);}
         // Xóa category nếu tồn tại
         categoryRepository.deleteById(id);
     }

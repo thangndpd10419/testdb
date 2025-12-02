@@ -12,7 +12,6 @@ public class UserResponseDTO {
     private String name;
     private int age;
     private String email;
-    private String password;
     private String address;
     private String phone;
     private Role role;

@@ -6,6 +6,7 @@ import com.example.foodbe.response.review.ReviewResponseDto;
 import com.example.foodbe.request.review.UpdateReviewDto;
 import com.example.foodbe.payload.ApiResponse;
 import com.example.foodbe.services.ReviewService;
+import com.example.foodbe.utils.ConstantUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,7 +43,7 @@ public class ReviewController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteById(@PathVariable Long id){
         reviewService.deleteById(id);
-        return ResponseEntity.ok(ApiResponse.success("Delete success"));
+        return ResponseEntity.ok(ApiResponse.success(ConstantUtils.DELETE_SUCCESSFULLY +id));
     }
 
 

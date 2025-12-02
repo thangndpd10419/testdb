@@ -1,9 +1,11 @@
 package com.example.foodbe.request.category;
 
 import com.example.foodbe.annotation.FormatWhitespace;
+import com.example.foodbe.annotation.Trim;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -12,13 +14,17 @@ import javax.validation.constraints.NotBlank;
 public class UpdateCategoryDTO {
 
     @FormatWhitespace
-    @NotBlank(message = "name not null")
+    @NotBlank(message = "{entity.name.required}")
+    @Size(max = 30, message = "{entity.name.length}")
     private String name;
 
-    @NotBlank(message = "slug not null")
+    @FormatWhitespace
+    @NotBlank(message = "{entity.name.required}")
+    @Size(max = 20, message = "{entity.name.length}")
     private String slug;
 
-    @NotBlank(message = "img not null")
+    @Trim
+    @NotBlank(message = "{entity.name.required}")
     private String imgCategory;
 
 }

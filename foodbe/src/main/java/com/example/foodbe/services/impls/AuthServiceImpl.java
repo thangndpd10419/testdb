@@ -1,6 +1,8 @@
 package com.example.foodbe.services.impls;
 
 import com.example.foodbe.config.JwtUtil;
+import com.example.foodbe.exception_handler.NotFoundException;
+import com.example.foodbe.exception_handler.exception.InvalidDataException;
 import com.example.foodbe.models.AppUser;
 import com.example.foodbe.models.Token;
 import com.example.foodbe.request.auth.AuthRequest;
@@ -8,6 +10,7 @@ import com.example.foodbe.response.auth.AuthResponse;
 import com.example.foodbe.services.AuthService;
 import com.example.foodbe.services.TokenService;
 import com.example.foodbe.services.UserService;
+import com.example.foodbe.utils.ConstantUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,6 +51,10 @@ public class AuthServiceImpl implements AuthService {
         String email = userDetails.getUsername();
         AppUser appUser= userService.findByEmail(email);
 
+        if(appUser == null){
+            throw new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND +email);
+        }
+
         // 3. Lấy roles từ authorities
         List<String> roles = userDetails.getAuthorities()
                 .stream()
@@ -65,7 +72,6 @@ public class AuthServiceImpl implements AuthService {
         return AuthResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .roles(roles)
                 .build();
     }
 
@@ -73,14 +79,9 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse refreshToken(String refreshTokenRaw) {
 
         // 1. Validate refresh token
-        Optional<Token> tokenOptional = tokenService.validateToken(refreshTokenRaw);
+        Token token = tokenService.validateToken(refreshTokenRaw);
 
-        if (tokenOptional.isEmpty()) {
-            throw new RuntimeException("Invalid refresh token");
-        }
-
-        Token oldToken = tokenOptional.get();
-        AppUser appUser = oldToken.getAppUser();
+        AppUser appUser = token.getAppUser();
 
         // 2. Lấy roles của user
         List<String> roles = List.of("ROLE_" + appUser.getRole().name());
@@ -90,14 +91,13 @@ public class AuthServiceImpl implements AuthService {
 //        Instant expiresAt = jwtUtil.getExpiration(newAccessToken);
 
         // 4. ROTATE refresh token: xóa cái cũ, tạo cái mới
-        tokenService.revokeToken(oldToken);
+        tokenService.revokeToken(token);
         String newRefreshToken = tokenService.createToken(appUser);
 
         // 5. Trả về response
         return AuthResponse.builder()
                 .accessToken(newAccessToken)
                 .refreshToken(newRefreshToken)
-                .roles(roles)
                 .build();
     }
 

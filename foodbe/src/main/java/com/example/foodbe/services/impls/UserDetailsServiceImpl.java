@@ -1,7 +1,9 @@
 package com.example.foodbe.services.impls;
 
+import com.example.foodbe.exception_handler.NotFoundException;
 import com.example.foodbe.models.AppUser;
 import com.example.foodbe.repositories.UserRepository;
+import com.example.foodbe.utils.ConstantUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -20,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
        AppUser user= userRepository.findByEmail(email)
-                .orElseThrow(()->new UsernameNotFoundException("User not found"));
+                .orElseThrow(()->new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND +email));
 
         return new org.springframework.security.core.userdetails.User(
                  user.getEmail(),

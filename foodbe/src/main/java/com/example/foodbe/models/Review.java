@@ -27,7 +27,7 @@ public class Review {
     @JoinColumn(name = "product_id",nullable = false)
     private Product product;
     @CreationTimestamp
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    private LocalDateTime update_at;
+    private LocalDateTime updateAt;
 }

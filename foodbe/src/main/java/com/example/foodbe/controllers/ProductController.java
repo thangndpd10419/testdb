@@ -6,6 +6,7 @@ import com.example.foodbe.response.product.ProductResponseDTO;
 import com.example.foodbe.request.product.UpdateProductDTO;
 import com.example.foodbe.payload.ApiResponse;
 import com.example.foodbe.services.ProductService;
+import com.example.foodbe.utils.ConstantUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,7 +48,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteById(@PathVariable Long id){
         productService.deleteById(id);
-        return ResponseEntity.ok(ApiResponse.success("Xoa thanh cong product tai id: "+id));
+        return ResponseEntity.ok(ApiResponse.success(ConstantUtils.DELETE_SUCCESSFULLY +id));
     }
 
 }

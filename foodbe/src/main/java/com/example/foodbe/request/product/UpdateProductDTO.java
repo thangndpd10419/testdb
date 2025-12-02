@@ -1,10 +1,12 @@
 package com.example.foodbe.request.product;
 
 import com.example.foodbe.annotation.FormatWhitespace;
+import com.example.foodbe.annotation.Trim;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 
@@ -15,16 +17,24 @@ import java.math.BigDecimal;
 public class UpdateProductDTO {
 
     @FormatWhitespace
-    @NotBlank(message = "product name not empty")
+    @NotBlank(message = "{entity.name.required}")
     private String name;
-    @NotBlank(message = "product slug not empty")
+
+    @FormatWhitespace
+    @NotBlank(message = "{entity.name.required}")
     private String slug;
-    @NotNull(message = "price not null")
+
+    @NotNull(message = "{entity.number.not.null}")
     private BigDecimal price;
-    @NotBlank(message = "product img not empty")
+
+    @Trim
+    @NotBlank(message = "{entity.name.required}")
     private String imgProduct;
-    @NotBlank(message = "product description not empty")
+
+    @Size(max = 1000, message = "{entity.size.max}")
     private String description;
-    @NotNull(message = "img not null")
-    private Long idCategory;
+
+    @NotNull(message = "{entity.number.not.null}")
+    private Long categoryId;
+
 }

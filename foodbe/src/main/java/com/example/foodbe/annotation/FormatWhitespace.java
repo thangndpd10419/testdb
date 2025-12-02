@@ -1,6 +1,6 @@
 package com.example.foodbe.annotation;
 
-import com.example.foodbe.handler_annotation.FormatWhitespaceDeserializer;
+import com.example.foodbe.annotation_handler.FormatWhitespaceDeserializer;
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 

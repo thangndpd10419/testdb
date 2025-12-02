@@ -12,7 +12,7 @@ public interface TokenService {
 
     // Validate refresh token: check tồn tại, revoked, expired
     // return token để biết đag dùng user nào mà tạo jwt
-    Optional<Token> validateToken(String tokenHash);
+    Token validateToken(String tokenHash);
 
     // Revoke token
     void revokeToken(Token token);

@@ -26,7 +26,6 @@ public class UserMapper {
                 .name(user.getName())
                 .age(user.getAge())
                 .email(user.getEmail())
-                .password(user.getPassword())
                 .address(user.getAddress())
                 .phone(user.getPhone())
                 .role(user.getRole())

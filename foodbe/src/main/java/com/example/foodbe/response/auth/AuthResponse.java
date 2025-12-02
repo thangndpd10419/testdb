@@ -12,6 +12,5 @@ import java.util.List;
 public class AuthResponse {
     private String accessToken;
     private String refreshToken;
-    private List<String> roles;
 
 }

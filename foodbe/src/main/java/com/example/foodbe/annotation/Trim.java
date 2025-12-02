@@ -1,7 +1,7 @@
 package com.example.foodbe.annotation;
 
 
-import com.example.foodbe.handler_annotation.TrimStringDeserializer;
+import com.example.foodbe.annotation_handler.TrimStringDeserializer;
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 

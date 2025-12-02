@@ -1,10 +1,14 @@
 package com.example.foodbe.services.impls;
 
+import com.example.foodbe.exception_handler.NotFoundException;
+import com.example.foodbe.exception_handler.exception.InvalidDataException;
+import com.example.foodbe.exception_handler.exception.SystemErrorException;
 import com.example.foodbe.models.AppUser;
 import com.example.foodbe.models.Token;
 import com.example.foodbe.repositories.TokenRepository;
 import com.example.foodbe.response.token.TokenResponseDTO;
 import com.example.foodbe.services.TokenService;
+import com.example.foodbe.utils.ConstantUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +16,11 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -54,21 +60,17 @@ public class TokenServiceImpl implements TokenService {
 
     // Validate token
     @Override
-    public Optional<Token> validateToken(String tokenRaw) {
+    public Token validateToken(String tokenRaw) {
         String tokenHash= hashToken(tokenRaw);
-        Optional<Token> opt = tokenRepository.findByToken(tokenHash);
+        Token token = tokenRepository.findByToken(tokenHash)
+                .orElseThrow(()-> new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND));
 
-        Token token = opt.orElseThrow(() -> new RuntimeException("Refresh token không tồn tại"));
-
-        if (token.isRevoked()) {
-            throw new RuntimeException("Refresh token đã bị revoke");
-        }
-
+        if (token.isRevoked()) throw new InvalidDataException(ConstantUtils.ExceptionMessage.TOKEN_IS_REVOKED);
         if (token.getExpires_at().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Refresh token đã hết hạn");
+            throw new InvalidDataException(ConstantUtils.ExceptionMessage.TOKEN_IS_EXPIRED);
         }
 
-        return opt;
+        return token;
     }
 
     // Revoke token
@@ -84,7 +86,7 @@ public class TokenServiceImpl implements TokenService {
             byte[] hash = digest.digest(tokenRaw.getBytes(StandardCharsets.UTF_8));
             return Base64.getUrlEncoder().withoutPadding().encodeToString(hash);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error hashing refresh token", e);
+            throw new SystemErrorException("Error hashing refresh token", e);
         }
     }
 

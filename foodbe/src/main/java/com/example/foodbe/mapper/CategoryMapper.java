@@ -1,11 +1,12 @@
 package com.example.foodbe.mapper;
 
-import com.example.foodbe.dto.category.CategoryReferenceDTO;
 import com.example.foodbe.response.category.CategoryResponseDTO;
 import com.example.foodbe.request.category.CreateCategoryDTO;
 import com.example.foodbe.request.category.UpdateCategoryDTO;
 import com.example.foodbe.models.Category;
 import org.springframework.stereotype.Component;
+
+import java.util.function.Function;
 
 @Component
 public class CategoryMapper {
@@ -37,14 +38,15 @@ public class CategoryMapper {
     }
 
 
-    // mapper between Category and category reference
-    public CategoryReferenceDTO toReference(Category category){
-        return CategoryReferenceDTO.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .slug(category.getSlug())
-                .build();
-    }
+
+//    // mapper between Category and category reference
+//    public CategoryReferenceDTO toReference(Category category){
+//        return CategoryReferenceDTO.builder()
+//                .id(category.getId())
+//                .name(category.getName())
+//                .slug(category.getSlug())
+//                .build();
+//    }
 
 
 }

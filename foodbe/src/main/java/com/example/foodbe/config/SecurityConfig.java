@@ -42,8 +42,8 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(SecurityConstant.WHITE_LIST).permitAll() // requestMathches nhận string, nhiều string hoặc array string
-                        .requestMatchers(HttpMethod.GET,"/api/categories/**","/api/products/**","/api/reviews/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                        .requestMatchers(HttpMethod.GET,SecurityConstant.PUBLIC_GET).permitAll()
+                        .requestMatchers(HttpMethod.POST,SecurityConstant.PUBLIC_POST).permitAll()
                         .anyRequest().authenticated()
                 )
 

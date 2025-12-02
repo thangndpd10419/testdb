@@ -1,6 +1,6 @@
 //package com.example.foodbe.util;
 //
-//import com.example.commonservice.entity.ApiResponse;
+//import com.example.foodbe.payload.ApiResponse;
 //import lombok.RequiredArgsConstructor;
 //import org.modelmapper.ModelMapper;
 //

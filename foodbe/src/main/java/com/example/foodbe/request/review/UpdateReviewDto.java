@@ -13,11 +13,12 @@ import javax.validation.constraints.Size;
 @Builder
 public class UpdateReviewDto {
 
-    @Min(value = 1,message = "đánh giá >=1")
-    @Max(value = 5, message = "đánh giá ,=5")
+    @Min(value = 1, message = "{entity.size.min}")
+    @Max(value = 5, message = "{entity.size.max}")
     private int rating;       // Điểm đánh giá mới
-    @NotBlank(message = "Comment không để trống")
-    @Size(max = 500, message = "Comment không quá 500 kí tự")
+
+    @NotBlank(message = "{entity.name.required}")
+    @Size(max = 500, message = "{entity.size.max}")
     private String comment;   // Nội dung đánh giá mới
 
 }

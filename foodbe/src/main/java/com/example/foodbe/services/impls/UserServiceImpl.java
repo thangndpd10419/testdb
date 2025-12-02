@@ -1,11 +1,13 @@
 package com.example.foodbe.services.impls;
 
+import com.example.foodbe.exception_handler.NotFoundException;
 import com.example.foodbe.request.user.UserCreateDTO;
 import com.example.foodbe.response.user.UserResponseDTO;
 import com.example.foodbe.mapper.UserMapper;
 import com.example.foodbe.models.AppUser;
 import com.example.foodbe.repositories.UserRepository;
 import com.example.foodbe.services.UserService;
+import com.example.foodbe.utils.ConstantUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +28,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(Long id) {
         AppUser appUser = userRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("not found user by id: "+id));
+                .orElseThrow(()->new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND +id));
         userRepository.deleteById(id);
     }
 
@@ -41,14 +43,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDTO findById(Long id) {
         AppUser user= userRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("not found by id: "+id));
+                .orElseThrow(()->new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND +id));
         return userMapper.toDto(user);
     }
 
     @Override
     public UserResponseDTO create(UserCreateDTO userCreateDTO) {
         if (userRepository.existsByEmail(userCreateDTO.getEmail())) {
-            throw new RuntimeException("Username already exists");
+            throw new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND +userCreateDTO.getEmail());
         }
         String newPass=  bCryptPasswordEncoder.encode(userCreateDTO.getPassword());
         userCreateDTO.setPassword(newPass);
@@ -60,7 +62,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public AppUser findByEmail(String email) {
         AppUser appUser= userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(email));
+                .orElseThrow(() ->new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND +email));
         return appUser;
     }
     // optional dùng khi dữ liệu trả về có thể null( search,..)

@@ -1,4 +1,4 @@
-package com.example.foodbe.handler_annotation;
+package com.example.foodbe.annotation_handler;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
