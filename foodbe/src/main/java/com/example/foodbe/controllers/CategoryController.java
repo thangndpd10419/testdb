@@ -30,12 +30,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>>  getAll(){
-        return ResponseEntity.ok(ApiResponse.success(categoryService.findAll()));
-    }
-
-    @GetMapping("")
-    public ResponseEntity<ApiResponse<PageResponse<CategoryResponseDTO>>> getByNameContaining(
+    public ResponseEntity<ApiResponse<PageResponse<CategoryResponseDTO>>> getCategories(
             @Min(value = ConstantUtils.Page.MIN_CURRENT_PAGE, message = ConstantUtils.Page.PAGE_MIN_MSG)
             @RequestParam(defaultValue = "" + ConstantUtils.Page.DEFAULT_CURRENT_PAGE) Integer page,
 

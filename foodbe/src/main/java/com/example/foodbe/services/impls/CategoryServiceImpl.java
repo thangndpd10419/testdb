@@ -29,15 +29,15 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
     private final PageMapperUtils2 pageMapperUtils2;
 
-    @Override
-    public List<CategoryResponseDTO> findAll() {
-        List<Category> categories = categoryRepository.findAll();
-
-        return categories.stream()
-                .map(category->categoryMapper.toDTO(category))
-                .collect(Collectors.toList());
-
-    }
+//    @Override
+//    public List<CategoryResponseDTO> findAll() {
+//        List<Category> categories = categoryRepository.findAll();
+//
+//        return categories.stream()
+//                .map(category->categoryMapper.toDTO(category))
+//                .collect(Collectors.toList());
+//
+//    }
 
 
     @Override
