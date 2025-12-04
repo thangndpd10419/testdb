@@ -4,14 +4,16 @@ import com.example.foodbe.annotation.FormatWhitespace;
 import com.example.foodbe.annotation.PasswordMatches;
 import com.example.foodbe.annotation.Trim;
 import com.example.foodbe.models.Role;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
-import javax.validation.constraints.*;
+//import javax.validation.constraints.*;
 
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @PasswordMatches
 public class UserCreateDTO {
@@ -22,8 +24,8 @@ public class UserCreateDTO {
     private String name;
 
     @NotNull(message = "{account.age.required}")
-    @Size(min = 18, message = "{account.age.length}")
-    private int age;
+    @Min(value = 18, message = "{account.age.length}")
+    private Integer age;
 
     @Trim
     @NotBlank(message = "{account.email.required}")

@@ -29,8 +29,8 @@ public class ReviewMapper {
                 .productId(review.getProduct().getId())
                 .userName(review.getAppUser().getName())      // chỉ lấy tên
                 .productName(review.getProduct().getName())   // chỉ lấy tên sản phẩm
-                .created_at(review.getCreated_at())
-                .updated_at(review.getUpdate_at())
+                .created_at(review.getCreatedAt())
+                .updated_at(review.getUpdateAt())
                 .build();
     }
 

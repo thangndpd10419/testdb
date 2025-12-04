@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDTO create(UserCreateDTO userCreateDTO) {
         if (userRepository.existsByEmail(userCreateDTO.getEmail())) {
-            throw new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND +userCreateDTO.getEmail());
+            throw new NotFoundException(ConstantUtils.ExceptionMessage.EXISTS +userCreateDTO.getEmail());
         }
         String newPass=  bCryptPasswordEncoder.encode(userCreateDTO.getPassword());
         userCreateDTO.setPassword(newPass);

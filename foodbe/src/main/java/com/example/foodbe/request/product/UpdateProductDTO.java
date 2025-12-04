@@ -2,11 +2,14 @@ package com.example.foodbe.request.product;
 
 import com.example.foodbe.annotation.FormatWhitespace;
 import com.example.foodbe.annotation.Trim;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+//import javax.validation.constraints.NotBlank;
+//import javax.validation.constraints.NotNull;
+//import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 

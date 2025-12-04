@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.validation.constraints.NotNull;
+//import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 
@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Table(name= "Category")
 public class Category {

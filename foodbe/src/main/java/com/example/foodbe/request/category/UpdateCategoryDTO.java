@@ -2,10 +2,12 @@ package com.example.foodbe.request.category;
 
 import com.example.foodbe.annotation.FormatWhitespace;
 import com.example.foodbe.annotation.Trim;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+//import javax.validation.constraints.NotBlank;
+//import javax.validation.constraints.Size;
 
 @Getter
 @Setter

@@ -84,9 +84,11 @@ public class GlobalExceptionHandler {
         // Chuyển FieldError thành ApiSubError với thông điệp i18n
         List<ApiSubError> fieldErrors = fieldErrorMap.values().stream()
                 .map(error -> {
-                    String code = getPriorityErrorCode(error.getCodes());
+                    String key = error.getDefaultMessage().replaceAll("^\\{|}$", "");
+
+//                    String code = getPriorityErrorCode(error.getCodes());
                     String message = messageSource.getMessage(
-                            code,
+                           key,
                             new Object[]{error.getField()},  // Placeholder: tên trường
                             locale
                     );
