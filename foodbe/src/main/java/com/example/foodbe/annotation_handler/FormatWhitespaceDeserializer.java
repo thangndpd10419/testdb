@@ -16,7 +16,7 @@ public class FormatWhitespaceDeserializer extends JsonDeserializer<String> {
         if(value== null) return null;
         value = value.trim();
 
-        return value.replaceAll("//s+"," ");
+        return value.replaceAll("\\s+"," ");
         //Cả replace và replaceAll đều thay đổi tất cả các chỗ trùng khớp trong chuỗi.
         // replace: thay đổi target chính xác bằng replacement
         //repalecAll: thay thế target bằng replacement theo mẫu regex

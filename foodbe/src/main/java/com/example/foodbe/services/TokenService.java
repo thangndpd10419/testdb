@@ -15,7 +15,7 @@ public interface TokenService {
     Token validateToken(String tokenHash);
 
     // Revoke token
-    void revokeToken(Token token);
+    void revokeToken(String token);
 
 
 }

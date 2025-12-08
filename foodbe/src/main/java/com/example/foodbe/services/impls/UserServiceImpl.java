@@ -1,6 +1,8 @@
 package com.example.foodbe.services.impls;
 
 import com.example.foodbe.exception_handler.NotFoundException;
+import com.example.foodbe.mapper.UserPendingMapper;
+import com.example.foodbe.models.UserPending;
 import com.example.foodbe.payload.PageResponse;
 import com.example.foodbe.request.user.UserCreateDTO;
 import com.example.foodbe.response.user.UserResponseDTO;
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder bCryptPasswordEncoder;
     private final PageMapperUtils2 pageMapperUtils2;
+    private final UserPendingMapper userPendingMapper;
 
 
     @Override
@@ -60,6 +63,19 @@ public class UserServiceImpl implements UserService {
         String newPass=  bCryptPasswordEncoder.encode(userCreateDTO.getPassword());
         userCreateDTO.setPassword(newPass);
         AppUser user= userMapper.toEntity(userCreateDTO);
+
+        return userMapper.toDto(userRepository.save(user));
+    }
+
+
+    @Override
+    public UserResponseDTO create2(UserPending userPending) {
+        if (userRepository.existsByEmail(userPending.getEmail())) {
+            throw new NotFoundException(ConstantUtils.ExceptionMessage.EXISTS);
+        }
+        String newPass=  bCryptPasswordEncoder.encode(userPending.getPassword());
+        userPending.setPassword(newPass);
+        AppUser user= userPendingMapper.toAppUser(userPending);
 
         return userMapper.toDto(userRepository.save(user));
     }

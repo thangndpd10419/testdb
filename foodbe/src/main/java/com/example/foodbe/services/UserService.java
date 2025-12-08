@@ -1,6 +1,7 @@
 package com.example.foodbe.services;
 
 import com.example.foodbe.models.AppUser;
+import com.example.foodbe.models.UserPending;
 import com.example.foodbe.payload.PageResponse;
 import com.example.foodbe.request.user.UserCreateDTO;
 import com.example.foodbe.response.user.UserResponseDTO;
@@ -17,4 +18,7 @@ public interface UserService {
     void deleteById(Long id);
     UserResponseDTO findById(Long id);
     AppUser findByEmail(String email);
+
+    //
+    UserResponseDTO create2(UserPending userPending);
 }

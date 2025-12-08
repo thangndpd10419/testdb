@@ -92,7 +92,8 @@ public class AuthServiceImpl implements AuthService {
 //        Instant expiresAt = jwtUtil.getExpiration(newAccessToken);
 
         // 4. ROTATE refresh token: xóa cái cũ, tạo cái mới
-        tokenService.revokeToken(token);
+        String t= token.getToken();
+        tokenService.revokeToken(t);
         String newRefreshToken = tokenService.createToken(appUser);
 
         // 5. Trả về response

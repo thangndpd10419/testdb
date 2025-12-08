@@ -63,8 +63,8 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public Token validateToken(String tokenRaw) {
         String tokenHash= hashToken(tokenRaw);
-        Token token = tokenRepository.findByToken(tokenHash)
-                .orElseThrow(()-> new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND));
+        Token token = tokenRepository.findByToken(tokenRaw)
+                .orElseThrow(()-> new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND+"xxx"));
 
         if (token.isRevoked()) throw new InvalidDataException(ConstantUtils.ExceptionMessage.TOKEN_IS_REVOKED);
         if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
@@ -76,9 +76,12 @@ public class TokenServiceImpl implements TokenService {
 
     // Revoke token
     @Override
-    public void revokeToken(Token token) {
-        token.setRevoked(true);
-        tokenRepository.save(token);
+    public void revokeToken(String token) {
+        Token t = tokenRepository.findByToken(token)
+                        .orElseThrow(()-> new NotFoundException(ConstantUtils.ExceptionMessage.NOT_FOUND));
+
+        t.setRevoked(true);
+        tokenRepository.save(t);
     }
 
     private String hashToken(String tokenRaw) {
