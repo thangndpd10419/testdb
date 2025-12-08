@@ -49,8 +49,9 @@ public class TokenServiceImpl implements TokenService {
         Token token = Token.builder()
                 .token(tokenHash)
                 .revoked(false)
-                .appUser(user)
-                .createdAt(LocalDateTime.now().plusHours(TOKEN_EXPIRE_HOURS))
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .expiresAt(LocalDateTime.now().plusHours(TOKEN_EXPIRE_HOURS))
                 .build();
 
         tokenRepository.save(token);

@@ -5,6 +5,7 @@ import com.example.foodbe.payload.ApiError;
 import com.example.foodbe.payload.ApiResponse;
 import com.example.foodbe.payload.ApiSubError;
 import com.example.foodbe.utils.ConstantUtils;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
@@ -29,6 +30,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
     private final MessageSource messageSource;
+//      private final Validator validator;
+
 
     // ==================== NotFoundException (404) ====================
     @ExceptionHandler(NotFoundException.class)
@@ -85,13 +88,13 @@ public class GlobalExceptionHandler {
         List<ApiSubError> fieldErrors = fieldErrorMap.values().stream()
                 .map(error -> {
                     String key = error.getDefaultMessage().replaceAll("^\\{|}$", "");
-
 //                    String code = getPriorityErrorCode(error.getCodes());
-                    String message = messageSource.getMessage(
-                           key,
-                            new Object[]{error.getField()},  // Placeholder: tên trường
-                            locale
-                    );
+//                    String message = messageSource.getMessage(
+//                           key,
+//                                error.getArguments(),
+//                            locale
+//                    );
+                    String message = error.getDefaultMessage();
                     return new ApiSubError(error.getField(), message);
                 })
                 .collect(Collectors.toList());

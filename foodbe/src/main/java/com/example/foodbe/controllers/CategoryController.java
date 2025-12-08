@@ -58,27 +58,25 @@ public class CategoryController {
     }
 
 
-    @PreAuthorize("hasRole('Admin')")
-    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("")
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(@Valid @RequestBody CreateCategoryDTO createCategoryDTO){
         return ResponseEntity.ok(ApiResponse.success(categoryService.create(createCategoryDTO)));
     }
 
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> updateById(@PathVariable Long id,
                                          @Valid @RequestBody UpdateCategoryDTO updateCategoryDTO){
         return ResponseEntity.ok(ApiResponse.success(categoryService.updateById(id,updateCategoryDTO)));
     }
 
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteById(@PathVariable Long id){
         categoryService.deleteById(id);
         return  ResponseEntity.ok(ApiResponse.success(ConstantUtils.DELETE_SUCCESSFULLY +id));
     }
-
-
 
 
 }

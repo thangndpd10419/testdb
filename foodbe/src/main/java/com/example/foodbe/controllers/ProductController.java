@@ -21,10 +21,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-//import javax.validation.Valid;
-//import javax.validation.constraints.Max;
-//import javax.validation.constraints.Min;
-//import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -56,19 +52,19 @@ public class ProductController {
         return ResponseEntity.ok(ApiResponse.success(productService.findById(id)));
     }
 
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ApiResponse<ProductResponseDTO>> create(@Valid @RequestBody CreateProductDTO createProductDTO){
         return ResponseEntity.ok(ApiResponse.success(productService.create(createProductDTO)));
     }
 
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ProductResponseDTO>> updateById(@PathVariable Long id, @Valid @RequestBody UpdateProductDTO updateProductDTO){
         return ResponseEntity.ok(ApiResponse.success(productService.updateById(id, updateProductDTO)));
     }
 
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteById(@PathVariable Long id){
         productService.deleteById(id);

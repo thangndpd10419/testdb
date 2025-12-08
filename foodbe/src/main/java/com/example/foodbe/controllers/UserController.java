@@ -15,13 +15,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-//import javax.validation.Valid;
-//import javax.validation.constraints.Max;
-//import javax.validation.constraints.Min;
-//import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -50,16 +47,18 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(@Valid @RequestBody UserCreateDTO userCreateDTO) {
+    public ResponseEntity<ApiResponse<UserResponseDTO>> create(@Valid @RequestBody UserCreateDTO userCreateDTO) {
         UserResponseDTO createdUser = userService.create(userCreateDTO);
         return ResponseEntity.ok(ApiResponse.success(createdUser));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<UserResponseDTO>> findById(@PathVariable Long id){
         return ResponseEntity.ok(ApiResponse.success(userService.findById(id)));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteById(@PathVariable Long id){
        userService.deleteById(id);

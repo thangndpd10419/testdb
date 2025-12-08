@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class CreateProductDTO {
 
@@ -25,9 +26,10 @@ public class CreateProductDTO {
     @NotBlank(message = "{entity.name.required}")
     private String name;
 
-    @FormatWhitespace
-    @NotBlank(message = "{entity.name.required}")
-    private String slug;
+
+    @NotNull(message = "{entity.number.not.null}")
+    @Positive(message = "{entity.number.positive}")
+    private int quantity;
 
     @NotNull(message = "{entity.number.not.null}")
     @Positive(message = "{entity.number.positive}")

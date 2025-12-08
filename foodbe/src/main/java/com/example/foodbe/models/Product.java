@@ -23,8 +23,8 @@ public class Product {
     private Long id;
     @Column(nullable = false)
     private String name;
-    @Column(nullable = false, unique = true)
-    private String slug;
+    @Column(nullable = false)
+    private int quality;
     @Column(nullable = false,precision = 10,scale = 2)
     private BigDecimal price;
     @Column(name = "img_product", nullable = false)
